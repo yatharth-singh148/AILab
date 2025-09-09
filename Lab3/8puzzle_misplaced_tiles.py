@@ -41,9 +41,9 @@ def print_state(state):
     print()
 
 initial_state = [
-    [2, 8, 3],
-    [1, 6, 4],
-    [0, 7, 5]
+    [1, 2, 3],
+    [8, 6, 0],
+    [7, 5, 4]
 ]
 goal_state = [
     [1, 2, 3],
