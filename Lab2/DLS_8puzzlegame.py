@@ -1,11 +1,9 @@
 from copy import deepcopy
 
-# Goal state
 goal_state = [[1, 2, 3],
               [4, 5, 6],
-              [7, 8, 0]]   # 0 = blank space
+              [7, 8, 0]]
 
-# Moves: up, down, left, right
 moves = [(-1, 0), (1, 0), (0, -1), (0, 1)]
 
 def find_blank(board):
@@ -28,16 +26,25 @@ def generate_children(board):
             children.append(new_board)
     return children
 
-def DLS(board, depth, limit):
+def board_to_tuple(board):
+    return tuple(num for row in board for num in row)
+
+def DLS(board, depth, limit, visited):
     if is_goal(board):
         return [board]
     if depth == limit:
         return None
-    
+
+    visited.add(board_to_tuple(board))
+
     for child in generate_children(board):
-        path = DLS(child, depth + 1, limit)
-        if path:
-            return [board] + path
+        t = board_to_tuple(child)
+        if t not in visited:
+            result = DLS(child, depth + 1, limit, visited)
+            if result:
+                return [board] + result
+
+    visited.remove(board_to_tuple(board))
     return None
 
 # Example initial state
@@ -45,8 +52,8 @@ initial_state = [[5, 1, 6],
                  [2, 0, 3],
                  [7, 4, 8]]
 
-limit = 20  # depth limit
-solution = DLS(initial_state, 0, limit)
+limit = 20
+solution = DLS(initial_state, 0, limit, set())
 
 if solution:
     print("Solution found!")
